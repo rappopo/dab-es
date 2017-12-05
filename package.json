@@ -1,10 +1,10 @@
 {
   "name": "@rappopo/dab-es",
   "version": "0.0.1",
-  "description": "An Elasticsearch DAL that stinks!",
+  "description": "An Elasticsearch data access layer that stinks!",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --exit"
   },
   "keywords": [
     "dab",
@@ -17,6 +17,7 @@
   "author": "Ardhi Lukianto <ardhi@lukianto.com>",
   "license": "MIT",
   "dependencies": {
+    "@rappopo/dab": "0.0.1",
     "e3po": "^1.2.2",
     "elasticsearch": "^14.0.0"
   },

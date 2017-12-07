@@ -1,5 +1,40 @@
 # @rappopo/dab-es
 
+A [Rappopo DAB](https://github.com/rappopo/dab) implementation for Elasticsearch.
+
+## Installation
+
+Simply invoke this command in your project folder:
+
+	$ npm install --save @rappopo/dab-es
+
+And within your script:
+
+	const DabEs = require('@rappopo/dab-es')
+	const dab = new DabEs({
+		hosts: ['localhost:9200'],
+		index: 'myindex',
+		type: 'mytype'
+	})
+	...
+	dab.findOne('my-doc').then(function(doc) { ... })
+
+## Options
+
+`hosts`: your Elasticsearch hosts array. If it not provided, it defauts to: *['localhost:9200']*
+
+`index`: the index name to bound to. Defaults to *test*
+
+`type`: the default type use. Defaults to *doc*
+
+Index and/or type can also be provided as params during a method call. If you do this, the provided one will be used instead.
+
+## Misc
+
+* [Methods](https://github.com/rappopo/dab)
+* [ChangeLog](CHANGELOG.md)
+* Donation: Bitcoin **16HVCkdaNMvw3YdBYGHbtt3K5bmpRmH74Y**
+
 ## License
 
 (The MIT License)

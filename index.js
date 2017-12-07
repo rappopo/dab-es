@@ -214,6 +214,194 @@ class DabEs extends Dab {
     })
   }
 
+  bulkCreate (body, params) {
+    [params] = this.sanitize(params)
+    this.setClient(params)
+    return new Promise((resolve, reject) => {
+      if (!this._.isArray(body))
+        return reject(new Error('Require array'))
+      this._.each(body, (b, i) => {
+        if (!b[this.options.idSrc])
+          b[this.options.idSrc] = this.uuid()
+        body[i] = b
+      })
+      const keys = this._(body).map(this.options.idSrc).value()
+      let opt = this._.merge(params.options || this.options.options, {
+        index: params.index || this.options.index,
+        type: params.type || this.options.type,
+        body: {
+          ids: keys
+        },
+        _source: false
+      })
+
+      this.client.mget(opt, (err, result) => {
+        if (err)
+          return reject(err)
+        let info = result.docs,
+          newBody = []
+        this._.each(body, (b, i) => {
+          newBody.push({ create: { _id: b._id }})
+          newBody.push(this._.omit(b, ['_id']))
+        })
+        let opt = this._.merge(params.options || this.options.options, {
+          index: params.index || this.options.index,
+          type: params.type || this.options.type,
+          body: newBody
+        })
+        this.client.bulk(opt, (err, result) => {
+          if (err)
+            return reject(err)
+          let ok = 0, status = []
+          this._.each(result.items, (r, i) => {
+            let stat = { success: r.create.result === 'created' ? true : false }
+            stat[this.options.idDest] = r.create._id
+            if (!stat.success)
+              stat.reason = info[i] && info[i].found ? 'Exists' : this._.upperFirst(r.create.result)
+            else
+              ok++
+            status.push(stat)
+          })
+          let data = {
+            success: true,
+            stat: {
+              ok: ok,
+              fail: body.length - ok,
+              total: body.length
+            },
+            data: status
+          }
+          resolve(data)
+        })    
+      })
+    })
+  }
+
+  bulkUpdate (body, params) {
+    [params] = this.sanitize(params)
+    this.setClient(params)
+    return new Promise((resolve, reject) => {
+      if (!this._.isArray(body))
+        return reject(new Error('Require array'))
+      this._.each(body, (b, i) => {
+        if (!b[this.options.idSrc])
+          b[this.options.idSrc] = this.uuid() // will likely to introduce 'not-found'
+        body[i] = b
+      })
+      const keys = this._(body).map(this.options.idSrc).value()
+      let opt = this._.merge(params.options || this.options.options, {
+        index: params.index || this.options.index,
+        type: params.type || this.options.type,
+        body: {
+          ids: keys
+        },
+        _source: false
+      })
+
+      this.client.mget(opt, (err, result) => {
+        if (err)
+          return reject(err)
+        let info = result.docs,
+          newBody = []
+        this._.each(body, (b, i) => {
+          newBody.push({ update: { _id: b._id }})
+          newBody.push({ doc: this._.omit(b, ['_id'])})
+        })
+        let opt = this._.merge(params.options || this.options.options, {
+          index: params.index || this.options.index,
+          type: params.type || this.options.type,
+          body: newBody
+        })
+        this.client.bulk(opt, (err, result) => {
+          if (err)
+            return reject(err)
+          let ok = 0, status = []
+          this._.each(result.items, (r, i) => {
+            let stat = { success: r.update.result === 'updated' ? true : false }
+            stat[this.options.idDest] = r.update._id
+            if (!stat.success)
+              stat.reason = info[i] && !info[i].found ? 'Not found' : this._.upperFirst(r.update.result)
+            else
+              ok++
+            status.push(stat)
+          })
+          let data = {
+            success: true,
+            stat: {
+              ok: ok,
+              fail: body.length - ok,
+              total: body.length
+            },
+            data: status
+          }
+          resolve(data)
+        })    
+      })
+    })
+  }
+
+  bulkRemove (body, params) {
+    [params] = this.sanitize(params)
+    this.setClient(params)
+    return new Promise((resolve, reject) => {
+      if (!this._.isArray(body))
+        return reject(new Error('Require array'))
+      this._.each(body, (b, i) => {
+        if (!b[this.options.idSrc])
+          b[this.options.idSrc] = this.uuid() // will likely to introduce 'not-found'
+        body[i] = b
+      })
+      const keys = this._(body).map(this.options.idSrc).value()
+      let opt = this._.merge(params.options || this.options.options, {
+        index: params.index || this.options.index,
+        type: params.type || this.options.type,
+        body: {
+          ids: keys
+        },
+        _source: false
+      })
+
+      this.client.mget(opt, (err, result) => {
+        if (err)
+          return reject(err)
+        let info = result.docs,
+          newBody = []
+        this._.each(body, (b, i) => {
+          newBody.push({ delete: { _id: b._id }})
+        })
+        let opt = this._.merge(params.options || this.options.options, {
+          index: params.index || this.options.index,
+          type: params.type || this.options.type,
+          body: newBody
+        })
+        this.client.bulk(opt, (err, result) => {
+          if (err)
+            return reject(err)
+          let ok = 0, status = []
+          this._.each(result.items, (r, i) => {
+            let stat = { success: r.delete.result === 'deleted' ? true : false }
+            stat[this.options.idDest] = r.delete._id
+            if (!stat.success)
+              stat.reason = info[i] && !info[i].found ? 'Not found' : this._.upperFirst(r.delete.result)
+            else
+              ok++
+            status.push(stat)
+          })
+          let data = {
+            success: true,
+            stat: {
+              ok: ok,
+              fail: body.length - ok,
+              total: body.length
+            },
+            data: status
+          }
+          resolve(data)
+        })    
+      })
+    })
+  }
+
 }
 
 module.exports = DabEs

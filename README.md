@@ -1,23 +1,27 @@
 # @rappopo/dab-es
 
-A [Rappopo DAB](https://github.com/rappopo/dab) implementation for Elasticsearch.
+A [Rappopo DAB](https://github.com/rappopo/dab) implementation for Elasticsearch. The excellent library [e3po](https://github.com/dab00/e3po) is used to transform Mongo Query Language to Elasticsearch DSB.
 
 ## Installation
 
 Simply invoke this command in your project folder:
 
-	$ npm install --save @rappopo/dab-es
+```
+$ npm install --save @rappopo/dab-es
+```
 
 And within your script:
 
-	const DabEs = require('@rappopo/dab-es')
-	const dab = new DabEs({
-		hosts: ['localhost:9200'],
-		index: 'myindex',
-		type: 'mytype'
-	})
-	...
-	dab.findOne('my-doc').then(function(doc) { ... })
+```javascript
+const DabEs = require('@rappopo/dab-es')
+const dab = new DabEs({
+  hosts: ['localhost:9200'],
+  index: 'myindex',
+  type: 'mytype'
+})
+...
+dab.findOne('my-doc').then(function(doc) { ... })
+```
 
 ## Options
 

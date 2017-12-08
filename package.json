@@ -1,6 +1,6 @@
 {
   "name": "@rappopo/dab-es",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "An Elasticsearch data access layer that stinks!",
   "main": "index.js",
   "scripts": {

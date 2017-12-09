@@ -101,7 +101,7 @@ class DabEs extends Dab {
   }
 
   _create (body, params, callback) {
-    let opt = this._.merge(params.options || this.options.options, {
+    let opt = this._.merge(params.options || this._.cloneDeep(this.options.options), {
       index: params.index || this.options.index,
       type: params.type || this.options.type
     })
@@ -159,7 +159,7 @@ class DabEs extends Dab {
           return reject(result.err)
         let source = result.data,
           method = 'update', 
-          opt = this._.merge(params.options || this.options.options, {
+          opt = this._.merge(params.options || this._.cloneDeep(this.options.options), {
             index: params.index || this.options.index,
             type: params.type || this.options.type,
             id: id
@@ -197,7 +197,7 @@ class DabEs extends Dab {
         if (!result.success)
           return reject(result.err)
         let source = result.data, 
-          opt = this._.merge(params.options || this.options.options, {
+          opt = this._.merge(params.options || this._.cloneDeep(this.options.options), {
             index: params.index || this.options.index,
             type: params.type || this.options.type,
             id: id
@@ -226,7 +226,7 @@ class DabEs extends Dab {
         body[i] = b
       })
       const keys = this._(body).map(this.options.idSrc).value()
-      let opt = this._.merge(params.options || this.options.options, {
+      let opt = this._.merge(params.options || this._.cloneDeep(this.options.options), {
         index: params.index || this.options.index,
         type: params.type || this.options.type,
         body: {
@@ -244,7 +244,7 @@ class DabEs extends Dab {
           newBody.push({ create: { _id: b._id }})
           newBody.push(this._.omit(b, ['_id']))
         })
-        let opt = this._.merge(params.options || this.options.options, {
+        let opt = this._.merge(params.options || this._.cloneDeep(this.options.options), {
           index: params.index || this.options.index,
           type: params.type || this.options.type,
           body: newBody
@@ -268,9 +268,10 @@ class DabEs extends Dab {
               ok: ok,
               fail: body.length - ok,
               total: body.length
-            },
-            data: status
+            }
           }
+          if (params.withDetail)
+            data.detail = status
           resolve(data)
         })    
       })
@@ -289,7 +290,7 @@ class DabEs extends Dab {
         body[i] = b
       })
       const keys = this._(body).map(this.options.idSrc).value()
-      let opt = this._.merge(params.options || this.options.options, {
+      let opt = this._.merge(params.options || this._.cloneDeep(this.options.options), {
         index: params.index || this.options.index,
         type: params.type || this.options.type,
         body: {
@@ -307,7 +308,7 @@ class DabEs extends Dab {
           newBody.push({ index: { _id: b._id }})
           newBody.push(this._.omit(b, ['_id']))
         })
-        let opt = this._.merge(params.options || this.options.options, {
+        let opt = this._.merge(params.options || this._.cloneDeep(this.options.options), {
           index: params.index || this.options.index,
           type: params.type || this.options.type,
           body: newBody
@@ -331,9 +332,10 @@ class DabEs extends Dab {
               ok: ok,
               fail: body.length - ok,
               total: body.length
-            },
-            data: status
+            }
           }
+          if (params.withDetail)
+            data.detail = status
           resolve(data)
         })    
       })
@@ -349,7 +351,7 @@ class DabEs extends Dab {
       this._.each(body, (b, i) => {
         body[i] = b || this.uuid()
       })
-      let opt = this._.merge(params.options || this.options.options, {
+      let opt = this._.merge(params.options || this._.cloneDeep(this.options.options), {
         index: params.index || this.options.index,
         type: params.type || this.options.type,
         body: {
@@ -366,7 +368,7 @@ class DabEs extends Dab {
         this._.each(body, (b, i) => {
           newBody.push({ delete: { _id: b }})
         })
-        let opt = this._.merge(params.options || this.options.options, {
+        let opt = this._.merge(params.options || this._.cloneDeep(this.options.options), {
           index: params.index || this.options.index,
           type: params.type || this.options.type,
           body: newBody
@@ -390,9 +392,10 @@ class DabEs extends Dab {
               ok: ok,
               fail: body.length - ok,
               total: body.length
-            },
-            data: status
+            }
           }
+          if (params.withDetail)
+            data.detail = status
           resolve(data)
         })    
       })

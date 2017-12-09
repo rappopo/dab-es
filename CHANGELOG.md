@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.0.6
+
+* withDetail params in all bulk methods
+* Updated to @rappopo/dab@0.0.6 to have copyFrom & copyTo for free 
+* Bug fix this.options.options need to be deep cloned
+
 ## 0.0.5
 
 * Spec changed on bulkRemove

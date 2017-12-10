@@ -33,6 +33,19 @@ dab.findOne('my-doc').then(function(doc) { ... })
 
 Index and/or type can also be provided as params during a method call. If you do this, the provided one will be used instead.
 
+## Features
+
+* [x] find
+* [x] findOne
+* [x] create
+* [x] update
+* [x] remove
+* [x] bulkCreate
+* [x] bulkUpdate
+* [x] bulkDelete
+* [x] copyFrom
+* [x] copyTo
+
 ## Misc
 
 * [Methods](https://github.com/rappopo/dab)

@@ -35,20 +35,19 @@ Index and/or type can also be provided as params during a method call. If you do
 
 ## Features
 
-* [x] find
-* [x] findOne
-* [x] create
-* [x] update
-* [x] remove
-* [x] bulkCreate
-* [x] bulkUpdate
-* [x] bulkDelete
-* [x] copyFrom
-* [x] copyTo
+* [x] [find](https://docs.rappopo.com/dab/method/find/)
+* [x] [findOne](https://docs.rappopo.com/dab/method/find-one/)
+* [x] [create](https://docs.rappopo.com/dab/method/create/)
+* [x] [update](https://docs.rappopo.com/dab/method/update/)
+* [x] [remove](https://docs.rappopo.com/dab/method/remove/)
+* [x] [bulkCreate](https://docs.rappopo.com/dab/method/bulk-create/)
+* [x] [bulkUpdate](https://docs.rappopo.com/dab/method/bulk-update/)
+* [x] [bulkRemove](https://docs.rappopo.com/dab/method/bulk-remove/)
+* [x] [copyFrom](https://docs.rappopo.com/dab/method/copy-from/)
+* [x] [copyTo](https://docs.rappopo.com/dab/method/copy-to/)
 
 ## Misc
 
-* [Methods](https://github.com/rappopo/dab)
 * [ChangeLog](CHANGELOG.md)
 * Donation: Bitcoin **16HVCkdaNMvw3YdBYGHbtt3K5bmpRmH74Y**
 

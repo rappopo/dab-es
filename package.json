@@ -1,6 +1,6 @@
 {
   "name": "@rappopo/dab-es",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "An Elasticsearch data access layer that stinks!",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
   "author": "Ardhi Lukianto <ardhi@lukianto.com>",
   "license": "MIT",
   "dependencies": {
-    "@rappopo/dab": "0.0.6",
+    "@rappopo/dab": "0.0.8",
     "e3po": "^1.2.2",
     "elasticsearch": "^14.0.0"
   },

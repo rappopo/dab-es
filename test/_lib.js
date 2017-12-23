@@ -39,11 +39,11 @@ function recreate(me, es, o, callback) {
 module.exports = {
   _: _,
   options: {
-    hosts: ['localhost:9200'],
+    hosts: ['nuc:9200'],
     index: 'test'
   },
   options1: {
-    hosts: ['localhost:9200'],
+    hosts: ['nuc:9200'],
     index: 'test1'
   },
   dummyData: [

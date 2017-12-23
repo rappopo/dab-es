@@ -11,8 +11,6 @@ class DabEs extends Dab {
 
   setOptions (options) {
     super.setOptions(this._.merge(this.options, {
-      idSrc: '_id',
-      idDest: options.idDest || options.idSrc || '_id',
       hosts: options.hosts || ['localhost:9200'],
       index: options.index || 'test',
       type: options.type || 'doc',
@@ -106,7 +104,7 @@ class DabEs extends Dab {
       type: params.type || this.options.type
     })
     if (body._id) opt.id = body._id
-    opt.body = this._.omit(body, [this.options.idSrc])
+    opt.body = this._.omit(body, ['_id'])
     this.client.create(opt)
     .then(data => {
       this._findOne(data._id, this._.pick(opt, ['index', 'type']), result => {
@@ -125,10 +123,8 @@ class DabEs extends Dab {
     [params, body] = this.sanitize(params, body)
     this.setClient(params)
     return new Promise((resolve, reject) => {
-      let id
-      [body, id] = this.delFakeGetReal(body)
-      if (id) {
-        this._findOne(id, params, result => {
+      if (body._id) {
+        this._findOne(body._id, params, result => {
           if (result.success) 
             return reject(new Error('Exists'))
           this._create(body, params, result => {
@@ -152,7 +148,7 @@ class DabEs extends Dab {
   update (id, body, params) {
     [params, body] = this.sanitize(params, body)
     this.setClient(params)
-    body = this._.omit(body, [this.options.idDest || this.options.idSrc])
+    body = this._.omit(body, ['_id'])
     return new Promise((resolve, reject) => {
       this._findOne(id, params, result => {
         if (!result.success)
@@ -168,7 +164,7 @@ class DabEs extends Dab {
           opt.body = body
           method = 'index'
         } else {
-          opt.body = { doc: this._.merge(this._.omit(result.data, [this.options.idSrc]), body) }
+          opt.body = { doc: this._.merge(this._.omit(result.data, ['_id']), body) }
         }
         this.client[method](opt)
         .then(data => {
@@ -221,11 +217,11 @@ class DabEs extends Dab {
       if (!this._.isArray(body))
         return reject(new Error('Require array'))
       this._.each(body, (b, i) => {
-        if (!b[this.options.idSrc])
-          b[this.options.idSrc] = this.uuid()
+        if (!b._id)
+          b._id = this.uuid()
         body[i] = b
       })
-      const keys = this._(body).map(this.options.idSrc).value()
+      const keys = this._(body).map('_id').value()
       let opt = this._.merge(params.options || this._.cloneDeep(this.options.options), {
         index: params.index || this.options.index,
         type: params.type || this.options.type,
@@ -255,7 +251,7 @@ class DabEs extends Dab {
           let ok = 0, status = []
           this._.each(result.items, (r, i) => {
             let stat = { success: r.create.result === 'created' ? true : false }
-            stat[this.options.idDest] = r.create._id
+            stat._id = r.create._id
             if (!stat.success)
               stat.message = info[i] && info[i].found ? 'Exists' : this._.upperFirst(r.create.result)
             else
@@ -285,11 +281,11 @@ class DabEs extends Dab {
       if (!this._.isArray(body))
         return reject(new Error('Require array'))
       this._.each(body, (b, i) => {
-        if (!b[this.options.idSrc])
-          b[this.options.idSrc] = this.uuid() // will likely to introduce 'not-found'
+        if (!b._id)
+          b._id = this.uuid() // will likely to introduce 'not-found'
         body[i] = b
       })
-      const keys = this._(body).map(this.options.idSrc).value()
+      const keys = this._(body).map('_id').value()
       let opt = this._.merge(params.options || this._.cloneDeep(this.options.options), {
         index: params.index || this.options.index,
         type: params.type || this.options.type,
@@ -319,7 +315,7 @@ class DabEs extends Dab {
           let ok = 0, status = []
           this._.each(result.items, (r, i) => {
             let stat = { success: r.index.result === 'updated' ? true : false }
-            stat[this.options.idDest] = r.index._id
+            stat._id = r.index._id
             if (!stat.success)
               stat.message = info[i] && !info[i].found ? 'Not found' : this._.upperFirst(r.index.result)
             else
@@ -379,7 +375,7 @@ class DabEs extends Dab {
           let ok = 0, status = []
           this._.each(result.items, (r, i) => {
             let stat = { success: r.delete.result === 'deleted' ? true : false }
-            stat[this.options.idDest] = r.delete._id
+            stat._id = r.delete._id
             if (!stat.success)
               stat.message = info[i] && !info[i].found ? 'Not found' : this._.upperFirst(r.delete.result)
             else

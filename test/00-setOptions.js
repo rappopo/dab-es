@@ -13,20 +13,9 @@ describe('setOptions', function () {
   it('should return the default options', function () {
     const cls = new Cls()
     expect(cls.options).to.containSubset({
-      idSrc: '_id',
-      idDest: '_id',
       hosts: ['localhost:9200'],
       index: 'test',
       type: 'doc',
-    })
-  })
-
-  it('should return options with custom idDest', function () {
-    const cls = new Cls({ 
-      idDest: 'uid'
-    })
-    expect(cls.options).to.include({
-      idDest: 'uid'
     })
   })
 
